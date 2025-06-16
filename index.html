@@ -4,17 +4,91 @@
     <meta charset="UTF-8" />
     <title>Sketch Poético</title>
     <style>
+      /* 🌫️ Fondo y capas borrosas */
       body {
         margin: 0;
+        padding: 0;
+        background: black;
         overflow: hidden;
-        background-color: black;
+        cursor: none;
+        font-family: "serif";
+      }
+
+      .layer-blur {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(8px);
+        z-index: 1;
+      }
+
+      /* 🖼️ Imágenes poéticas */
+      .img-poetica {
+        mix-blend-mode: screen;
+        filter: contrast(120%) grayscale(20%) brightness(90%);
+        transition: all 0.8s ease;
+        opacity: 0.9;
+      }
+
+      /* 📜 Textos con glitch sutil */
+      .texto-glitch {
+        position: absolute;
         color: white;
-        font-family: serif;
+        opacity: 0.8;
+        transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+        animation: glitchShift 3s infinite ease-in-out;
+      }
+
+      @keyframes glitchShift {
+        0% {
+          transform: translateY(0px);
+        }
+        25% {
+          transform: translateY(-0.8px);
+        }
+        50% {
+          transform: translateY(1.2px);
+        }
+        75% {
+          transform: translateY(-0.6px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* 🌬️ Cursor poético */
+      .cursor-poetico {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+        mix-blend-mode: overlay;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.08s ease-out;
+      }
+
+      /* ✨ Transiciones suaves */
+      .fade-in {
+        opacity: 0;
+        animation: fadeIn 1.2s forwards ease-in;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
       }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   </head>
   <body>
+    <div class="cursor-poetico" id="cursor"></div>
     <script>
       let imagenes = [];
       let textos = [];
@@ -151,6 +225,14 @@
       function windowResized() {
         resizeCanvas(windowWidth, windowHeight);
       }
+
+      // Cursor poético
+      document.addEventListener("mousemove", (e) => {
+        const cursor = document.getElementById("cursor");
+        if (cursor) {
+          cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        }
+      });
     </script>
   </body>
 </html>
