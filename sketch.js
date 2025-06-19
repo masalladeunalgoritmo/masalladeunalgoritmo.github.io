@@ -11,7 +11,7 @@ let selectedImg = null;
 let selectedLine = "";
 
 function preload() {
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= 40; i++) {
     imagenes.push(loadImage(`assets/${i}.png`));
   }
 
