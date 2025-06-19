@@ -11,8 +11,19 @@ let selectedLine = "";
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
-    let extension = i <= 7 ? "png" : "jpg";
-    imagenes.push(loadImage(`assets/${i}.${extension}`));
+    let pngPath = `assets/${i}.png`;
+    let jpgPath = `assets/${i}.jpg`;
+
+    loadImage(pngPath,
+      img => imagenes.push(img), // éxito con PNG
+      () => {
+        // si falla, intenta JPG
+        loadImage(jpgPath,
+          img => imagenes.push(img), // éxito con JPG
+          () => console.warn(`No se pudo cargar ${pngPath} ni ${jpgPath}`)
+        );
+      }
+    );
   }
 }
 
