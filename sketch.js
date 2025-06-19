@@ -37,7 +37,6 @@ function preload() {
     ["la pérdida se guarda en capas", "identidad en loop binario", "soy dato que no se deja borrar", "cada pétalo es una versión mía", "arder fue mi forma de quedarme"],
     ["¿cuando olvidas?", "memoria en delay", "la herida es un archivo abierto", "te guardo como sombra corrupta", "mi cuerpo parpadea en tus errores"]
   ];
-}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
