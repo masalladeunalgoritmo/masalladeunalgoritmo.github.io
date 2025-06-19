@@ -15,11 +15,10 @@ function preload() {
     let jpgPath = `assets/${i}.jpg`;
 
     loadImage(pngPath,
-      img => imagenes.push(img), // éxito con PNG
+      img => imagenes.push(img),
       () => {
-        // si falla, intenta JPG
         loadImage(jpgPath,
-          img => imagenes.push(img), // éxito con JPG
+          img => imagenes.push(img),
           () => console.warn(`No se pudo cargar ${pngPath} ni ${jpgPath}`)
         );
       }
@@ -69,34 +68,6 @@ function draw() {
       text(selectedLine, width / 2, height / 2 + 150);
       pop();
     }
-
-    let blink = frameCount % 60 < 30 ? 255 : 100;
-    let buttonX = width / 2;
-    let buttonY = height / 2 + 220;
-    let buttonW = 160;
-    let buttonH = 50;
-
-    push();
-    fill(255, blink);
-    stroke(200);
-    strokeWeight(2);
-    rectMode(CENTER);
-    rect(buttonX, buttonY, buttonW, buttonH, 20);
-    noStroke();
-    fill(0);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    text("VER MÁS", buttonX, buttonY);
-    pop();
-
-    if (
-      mouseIsPressed &&
-      mouseX > buttonX - buttonW / 2 && mouseX < buttonX + buttonW / 2 &&
-      mouseY > buttonY - buttonH / 2 && mouseY < buttonY + buttonH / 2
-    ) {
-      console.log("Botón presionado: VER MÁS");
-    }
-
     return;
   } else if (showPoeticMoment && now - poeticMomentStartTime >= 30000) {
     showPoeticMoment = false;
@@ -136,11 +107,23 @@ function draw() {
   }
 
   if (showPoeticButton) {
+    let blink = frameCount % 60 < 30 ? 255 : 100;
+    let buttonX = width / 2 + sin(frameCount * 0.1) * 2;
+    let buttonY = height - 60 + cos(frameCount * 0.1) * 2;
+    let buttonW = 180;
+    let buttonH = 50;
+
     push();
-    fill(255, 180);
-    textSize(28);
+    fill(255, blink);
+    stroke(200);
+    strokeWeight(2);
+    rectMode(CENTER);
+    rect(buttonX, buttonY, buttonW, buttonH, 20);
+    noStroke();
+    fill(0);
     textAlign(CENTER, CENTER);
-    text("Ir más allá", width / 2, height - 60);
+    textSize(20);
+    text("Ir más allá", buttonX, buttonY);
     pop();
   }
 }
@@ -151,7 +134,7 @@ function mousePressed() {
 
   if (showPoeticButton) {
     const d = dist(mouseX, mouseY, width / 2, height - 60);
-    if (d < 40) {
+    if (d < 90) {
       selectedImg = random(imagenes);
       const lineaAleatoria = random(textos);
       selectedLine = random(lineaAleatoria);
