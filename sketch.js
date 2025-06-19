@@ -11,8 +11,10 @@ let selectedLine = "";
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
-    imagenes.push(loadImage(`assets/${i}.png`));
+    let extension = i <= 7 ? "png" : "jpg";
+    imagenes.push(loadImage(`assets/${i}.${extension}`));
   }
+}
 
   textos = [
     ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
