@@ -57,7 +57,7 @@ function draw() {
     if (selectedImg && selectedLine) {
       push();
       imageMode(CENTER);
-      tint(255, 200);
+      tint(255, 220); // más brillante
       image(selectedImg, width / 2, height / 2, 300, 250);
       pop();
 
@@ -88,7 +88,7 @@ function draw() {
   rotate(angle);
   scale(zoom);
   imageMode(CENTER);
-  tint(255, 80);
+  tint(255, 200); // más brillante
   image(img, 0, 0, 220, 180);
   pop();
 
