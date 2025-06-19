@@ -1,6 +1,5 @@
 let imagenes = [];
 let textos = [];
-let isPaused = false;
 let fadeAlpha = [];
 let motionSpeed = 0.005;
 let lastInteractionTime = Date.now();
@@ -15,17 +14,16 @@ function preload() {
     imagenes.push(loadImage(`assets/${i}.png`));
   }
 
- textos = [
-  ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
-  ["soy cuerpo que quema", "lo marchito no es olvido", "el fuego no borra: revela", "una flor que siempre está", "me repito para no extinguirme"],
-  ["te pienso desde la ceniza", "la flor que eligió incendiarse", "el deseo arde cuando se archiva", "me sostengo en el calor del recuerdo", "arder es también un gesto de amor"],
-  ["memoria corrupta, como un sueño", "recuerdos en bucle", "archivo sensible dañado", "mi cuerpo no cabe en tus metadatos", "cada error guarda un nombre"],
-  ["mi voz está comprimida en ruinas", "memoria pixelada de un rostro ausente", "soy el eco de una imagen que nunca muere", "me repito como sistema que falla", "mi archivo carga lento en tu memoria"],
-  ["me arrugo para no desaparecer", "flor quemada es flor aún viva", "soy humo que sabe tu nombre", "me marchito sin rendirme", "lo quemado también recuerda"],
-  ["la pérdida se guarda en capas", "identidad en loop binario", "soy dato que no se deja borrar", "cada pétalo es una versión mía", "arder fue mi forma de quedarme"],
-  ["¿cuando olvidas?", "memoria en delay", "la herida es un archivo abierto", "te guardo como sombra corrupta", "mi cuerpo parpadea en tus errores"]
-];
-
+  textos = [
+    ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
+    ["soy cuerpo que quema", "lo marchito no es olvido", "el fuego no borra: revela", "una flor que siempre está", "me repito para no extinguirme"],
+    ["te pienso desde la ceniza", "la flor que eligió incendiarse", "el deseo arde cuando se archiva", "me sostengo en el calor del recuerdo", "arder es también un gesto de amor"],
+    ["memoria corrupta, como un sueño", "recuerdos en bucle", "archivo sensible dañado", "mi cuerpo no cabe en tus metadatos", "cada error guarda un nombre"],
+    ["mi voz está comprimida en ruinas", "memoria pixelada de un rostro ausente", "soy el eco de una imagen que nunca muere", "me repito como sistema que falla", "mi archivo carga lento en tu memoria"],
+    ["me arrugo para no desaparecer", "flor quemada es flor aún viva", "soy humo que sabe tu nombre", "me marchito sin rendirme", "lo quemado también recuerda"],
+    ["la pérdida se guarda en capas", "identidad en loop binario", "soy dato que no se deja borrar", "cada pétalo es una versión mía", "arder fue mi forma de quedarme"],
+    ["¿cuando olvidas?", "memoria en delay", "la herida es un archivo abierto", "te guardo como sombra corrupta", "mi cuerpo parpadea en tus errores"]
+  ];
 }
 
 function setup() {
@@ -37,67 +35,61 @@ function setup() {
 }
 
 function draw() {
-  noStroke();
-  fill(0, 10);
-  rect(0, 0, width, height);
+  background(0, 10);
 
   const now = Date.now();
-  if (now - lastInteractionTime > 10) {
+  if (now - lastInteractionTime > 1000) {
     showPoeticButton = true;
   }
 
- if (showPoeticMoment && now - poeticMomentStartTime < 30) {
-  if (selectedImg && selectedLine) {
-    push();
-    imageMode(CENTER);
-    tint(255, 200);
-    image(selectedImg, width / 2, height / 2, 300, 250);
-    pop();
+  if (showPoeticMoment && now - poeticMomentStartTime < 30000) {
+    if (selectedImg && selectedLine) {
+      push();
+      imageMode(CENTER);
+      tint(255, 200);
+      image(selectedImg, width / 2, height / 2, 300, 250);
+      pop();
+
+      push();
+      fill(255);
+      textSize(26);
+      textAlign(CENTER);
+      text(selectedLine, width / 2, height / 2 + 150);
+      pop();
+    }
+
+    let blink = frameCount % 60 < 30 ? 255 : 100;
+    let buttonX = width / 2;
+    let buttonY = height / 2 + 220;
+    let buttonW = 160;
+    let buttonH = 50;
 
     push();
-    fill(255);
-    textSize(26);
-    textAlign(CENTER);
-    text(selectedLine, width / 2, height / 2 + 150);
+    fill(255, blink);
+    stroke(200);
+    strokeWeight(2);
+    rectMode(CENTER);
+    rect(buttonX, buttonY, buttonW, buttonH, 20);
+    noStroke();
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    text("VER MÁS", buttonX, buttonY);
     pop();
+
+    if (
+      mouseIsPressed &&
+      mouseX > buttonX - buttonW / 2 && mouseX < buttonX + buttonW / 2 &&
+      mouseY > buttonY - buttonH / 2 && mouseY < buttonY + buttonH / 2
+    ) {
+      console.log("Botón presionado: VER MÁS");
+    }
+
+    return;
+  } else if (showPoeticMoment && now - poeticMomentStartTime >= 30000) {
+    showPoeticMoment = false;
   }
 
-  // BOTÓN REDONDEADO + PARPADEO
-  let blink = frameCount % 60 < 30 ? 255 : 100;
-  let buttonX = width / 2;
-  let buttonY = height / 2 + 220;
-  let buttonW = 160;
-  let buttonH = 50;
-
-  push();
-  fill(255, blink);
-  stroke(200);
-  strokeWeight(2);
-  rectMode(CENTER);
-  rect(buttonX, buttonY, buttonW, buttonH, 20); // radio de 20 para redondear
-  noStroke();
-  fill(0);
-  textAlign(CENTER, CENTER);
-  textSize(20);
-  text("VER MÁS", buttonX, buttonY);
-  pop();
-
-  // Verificación de clic
-  if (
-    mouseIsPressed &&
-    mouseX > buttonX - buttonW / 2 && mouseX < buttonX + buttonW / 2 &&
-    mouseY > buttonY - buttonH / 2 && mouseY < buttonY + buttonH / 2
-  ) {
-    // Aquí colocas la acción del botón
-    console.log("Botón presionado: VER MÁS");
-  }
-
-  return;
-} else if (showPoeticMoment && now - poeticMomentStartTime >= 300) {
-  showPoeticMoment = false;
-}
-
-if (!isPaused) {
   const img = random(imagenes);
   const imgX = random(width);
   const imgY = random(height);
@@ -130,22 +122,20 @@ if (!isPaused) {
     text(lineas[i], x, y);
     pop();
   }
-}
 
-if (showPoeticButton) {
-  push();
-  fill(255, 180);
-  textSize(28);
-  textAlign(CENTER, CENTER);
-  text("Ir más allá", width / 2, height - 60);
-  pop();
+  if (showPoeticButton) {
+    push();
+    fill(255, 180);
+    textSize(28);
+    textAlign(CENTER, CENTER);
+    text("Ir más allá", width / 2, height - 60);
+    pop();
+  }
 }
-
 
 function mousePressed() {
   lastInteractionTime = Date.now();
   fadeAlpha = Array(10).fill(0);
-  isPaused = !isPaused;
 
   if (showPoeticButton) {
     const d = dist(mouseX, mouseY, width / 2, height - 60);
