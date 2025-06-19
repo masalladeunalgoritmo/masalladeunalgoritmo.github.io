@@ -25,7 +25,7 @@ function preload() {
       }
     );
   }
-}
+
 
   textos = [
     ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
