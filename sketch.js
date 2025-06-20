@@ -66,7 +66,7 @@ function draw() {
       push();
       imageMode(CENTER);
       tint(255, 220);
-      image(selectedImg, width / 2, height / 2, 1080, 720);
+      image(selectedImg, width / 2, height / 2, 720, 1080);
       pop();
 
       // Texto sobre el popup
