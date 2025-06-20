@@ -7,8 +7,8 @@ let textoActual = "";
 let textoAnterior = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 30000;
-let duracionFade = 2000;
+let intervaloCambio = 3000;
+let duracionFade = 200;
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -53,13 +53,13 @@ function draw() {
 
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 720, 1080);
+    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
     noTint();
   }
 
   if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 720, 1080);
+    image(imagenActual, width / 2, height / 2, 1080, 1920);
     noTint();
   }
 
