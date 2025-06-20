@@ -7,8 +7,8 @@ let textoActual = "";
 let textoAnterior = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 30000; // cada 30 segundos
-let duracionFade = 2000;     // duración del crossfade en ms
+let intervaloCambio = 30000;
+let duracionFade = 2000;
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -38,9 +38,10 @@ function setup() {
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
   textSize(28);
+  textFont("Courier"); // ← Fuente tipo máquina de escribir
   fill(255);
   noCursor();
-  cambiarContenido(true); // primer contenido sin crossfade
+  cambiarContenido(true);
   tiempoUltimoCambio = millis();
 }
 
@@ -48,33 +49,26 @@ function draw() {
   background(0);
   let ahora = millis();
   let tiempoTranscurrido = ahora - tiempoUltimoCambio;
-
-  // Calculamos opacidad para el crossfade
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
 
-  // Imagen anterior (desapareciendo)
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 300, 250);
+    image(imagenAnterior, width / 2, height / 2, 720, 1080);
     noTint();
   }
 
-  // Imagen nueva (apareciendo)
   if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 300, 250);
+    image(imagenActual, width / 2, height / 2, 720, 1080);
     noTint();
   }
 
-  // Texto anterior
   fill(255, 255 * (1 - alpha));
-  text(textoAnterior, width / 2, height / 2 + 180);
+  text(textoAnterior, width / 2, height / 2 + 600);
 
-  // Texto nuevo
   fill(255, 255 * alpha);
-  text(textoActual, width / 2, height / 2 + 180);
+  text(textoActual, width / 2, height / 2 + 600);
 
-  // Cambiar contenido si ha pasado el tiempo
   if (tiempoTranscurrido > intervaloCambio) {
     cambiarContenido(false);
     tiempoUltimoCambio = ahora;
