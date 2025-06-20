@@ -47,8 +47,8 @@ function setup() {
 
 function draw() {
   background(0, 10);
-
   const now = Date.now();
+
   if (now - lastInteractionTime > 0) {
     showPoeticButton = true;
   }
@@ -62,7 +62,7 @@ function draw() {
       rect(0, 0, width, height);
       pop();
 
-      // Pop-up imagen responsiva
+      // Imagen del pop-up
       let popupW = width * 0.9;
       let popupH = popupW * (2 / 3);
       if (popupH > height * 0.75) {
@@ -76,7 +76,7 @@ function draw() {
       image(selectedImg, width / 2, height / 2, popupW, popupH);
       pop();
 
-      // Texto del pop-up
+      // Texto debajo del pop-up
       push();
       fill(255);
       textSize(min(width, height) * 0.03);
@@ -89,7 +89,7 @@ function draw() {
     showPoeticMoment = false;
   }
 
-  // Imagen de fondo aleatoria animada
+  // Imagen de fondo animada
   const img = random(imagenes);
   const imgX = random(width);
   const imgY = random(height);
@@ -109,7 +109,7 @@ function draw() {
   image(img, 0, 0, width * 0.12, height * 0.12);
   pop();
 
-  // Texto generativo centrado y adaptado
+  // Texto generativo centrado
   const lineas = random(textos);
   fadeAlpha = Array(lineas.length).fill(0);
   for (let i = 0; i < lineas.length; i++) {
@@ -124,13 +124,16 @@ function draw() {
     pop();
   }
 
-  // Botón "Ir más allá" responsivo con hover
+  // Botón responsivo
   if (showPoeticButton) {
     let blink = frameCount % 60 < 30 ? 255 : 100;
     let buttonW = width * 0.15;
     let buttonH = height * 0.07;
     let buttonX = width / 2;
-    let buttonY = height - height * 0.12;
+
+    // Usar altura visual real para móviles
+    let visualHeight = window.visualViewport ? window.visualViewport.height : height;
+    let buttonY = visualHeight - visualHeight * 0.12;
 
     let isHovering = dist(mouseX, mouseY, buttonX, buttonY) < buttonW / 2;
 
@@ -154,9 +157,12 @@ function mousePressed() {
   fadeAlpha = Array(10).fill(0);
 
   const buttonX = width / 2;
-  const buttonY = height - height * 0.12;
-  const d = dist(mouseX, mouseY, buttonX, buttonY);
   const buttonW = width * 0.15;
+
+  let visualHeight = window.visualViewport ? window.visualViewport.height : height;
+  const buttonY = visualHeight - visualHeight * 0.12;
+
+  const d = dist(mouseX, mouseY, buttonX, buttonY);
 
   if (showPoeticButton && d < buttonW / 2) {
     selectedImg = random(imagenes);
