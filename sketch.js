@@ -37,7 +37,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
-  textSize(28);
+  textSize(32);
   textFont("Courier"); // ← Fuente tipo máquina de escribir
   fill(255);
   noCursor();
