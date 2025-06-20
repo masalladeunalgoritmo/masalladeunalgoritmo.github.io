@@ -89,7 +89,7 @@ function draw() {
   motionSpeed = d < 150 ? 0.03 : 0.005;
 
   const breath = 1 + 0.03 * sin(frameCount * motionSpeed * 100);
-  let zoom = map(d, 0, 300, 1.3, 1) * breath;
+  let zoom = map(d, 0, 300, 1.5, 1) * breath;
   const angle = noise(frameCount * motionSpeed * 20) * 0.2;
 
   push();
@@ -118,7 +118,7 @@ function draw() {
   if (showPoeticButton) {
     let blink = frameCount % 60 < 30 ? 255 : 100;
     let buttonX = width / 2 + sin(frameCount * 0.1) * 2;
-    let buttonY = height - 60 + cos(frameCount * 0.1) * 2;
+    let buttonY = height - 222 + cos(frameCount * 0.1) * 2;
     let buttonW = 180;
     let buttonH = 50;
 
