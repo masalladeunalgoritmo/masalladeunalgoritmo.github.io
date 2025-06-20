@@ -8,7 +8,7 @@ let showPoeticMoment = false;
 let poeticMomentStartTime = 0;
 let selectedImg = null;
 let selectedLine = "";
-let buttonBottomMargin = 100; // margen desde el borde inferior
+let buttonBottomMargin = 222; // margen desde el borde inferior
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -56,21 +56,18 @@ function draw() {
 
   if (showPoeticMoment && now - poeticMomentStartTime < 6000) {
     if (selectedImg && selectedLine) {
-      // Fondo semitransparente para destacar el popup
       push();
       fill(0, 180);
       noStroke();
       rect(0, 0, width, height);
       pop();
 
-      // Imagen del popup (1080x720 centrado)
       push();
       imageMode(CENTER);
       tint(255, 220);
       image(selectedImg, width / 2, height / 2, 1080, 720);
       pop();
 
-      // Texto sobre el popup
       push();
       fill(255);
       textSize(36);
@@ -123,8 +120,11 @@ function draw() {
     let buttonW = 180;
     let buttonH = 50;
 
+    // Hover detection
+    let isHovering = dist(mouseX, mouseY, buttonX, buttonY) < buttonW / 2;
+
     push();
-    fill(255, blink);
+    fill(isHovering ? 255 : 200, blink);
     stroke(200);
     strokeWeight(2);
     rectMode(CENTER);
