@@ -49,7 +49,7 @@ function draw() {
   background(0, 10);
 
   const now = Date.now();
-  if (now - lastInteractionTime > 100) {
+  if (now - lastInteractionTime > 0) {
     showPoeticButton = true;
   }
 
@@ -110,7 +110,7 @@ function draw() {
     fill(255, fadeAlpha[i]);
     textSize(size);
     const x = width / 2 + sin(frameCount * motionSpeed * 50 + i) * 200;
-    const y = height / 2 + i * 40;
+    const y = height / 2 - (lineas.length * 40) / 2 + i * 40;
     text(lineas[i], x, y);
     pop();
   }
