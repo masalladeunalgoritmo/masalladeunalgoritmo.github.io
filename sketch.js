@@ -40,8 +40,8 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
-  textFont("serif");
-  frameRate(30);
+  textFont("Courier");
+  frameRate(32);
   fadeAlpha = Array(10).fill(0);
 }
 
