@@ -141,9 +141,18 @@ function mousePressed() {
   lastInteractionTime = Date.now();
   fadeAlpha = Array(10).fill(0);
 
+  let buttonX = width / 2;
+  let buttonY = height - 60;
+  let buttonW = 180;
+  let buttonH = 50;
+
   if (showPoeticButton) {
-    const d = dist(mouseX, mouseY, width / 2, height - 60);
-    if (d < 90) {
+    if (
+      mouseX >= buttonX - buttonW / 2 &&
+      mouseX <= buttonX + buttonW / 2 &&
+      mouseY >= buttonY - buttonH / 2 &&
+      mouseY <= buttonY + buttonH / 2
+    ) {
       selectedImg = random(imagenes);
       const lineaAleatoria = random(textos);
       selectedLine = random(lineaAleatoria);
