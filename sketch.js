@@ -8,6 +8,7 @@ let showPoeticMoment = false;
 let poeticMomentStartTime = 0;
 let selectedImg = null;
 let selectedLine = "";
+let buttonBottomMargin = 100; // margen desde el borde inferior
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -41,7 +42,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
   textFont("Courier");
-  frameRate(32);
+  frameRate(30);
   fadeAlpha = Array(10).fill(0);
 }
 
@@ -66,7 +67,7 @@ function draw() {
       push();
       imageMode(CENTER);
       tint(255, 220);
-      image(selectedImg, width / 2, height / 2, 720, 1080);
+      image(selectedImg, width / 2, height / 2, 1080, 720);
       pop();
 
       // Texto sobre el popup
@@ -89,7 +90,7 @@ function draw() {
   motionSpeed = d < 150 ? 0.03 : 0.005;
 
   const breath = 1 + 0.03 * sin(frameCount * motionSpeed * 100);
-  let zoom = map(d, 0, 300, 1.5, 1) * breath;
+  let zoom = map(d, 0, 300, 1.3, 1) * breath;
   const angle = noise(frameCount * motionSpeed * 20) * 0.2;
 
   push();
@@ -118,7 +119,7 @@ function draw() {
   if (showPoeticButton) {
     let blink = frameCount % 60 < 30 ? 255 : 100;
     let buttonX = width / 2 + sin(frameCount * 0.1) * 2;
-    let buttonY = height - 222 + cos(frameCount * 0.1) * 2;
+    let buttonY = height - buttonBottomMargin + cos(frameCount * 0.1) * 2;
     let buttonW = 180;
     let buttonH = 50;
 
@@ -142,7 +143,7 @@ function mousePressed() {
   fadeAlpha = Array(10).fill(0);
 
   if (showPoeticButton) {
-    const d = dist(mouseX, mouseY, width / 2, height - 60);
+    const d = dist(mouseX, mouseY, width / 2, height - buttonBottomMargin);
     if (d < 90) {
       selectedImg = random(imagenes);
       const lineaAleatoria = random(textos);
