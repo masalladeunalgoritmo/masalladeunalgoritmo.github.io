@@ -49,27 +49,36 @@ function draw() {
   background(0, 10);
 
   const now = Date.now();
-  if (now - lastInteractionTime > 1000) {
+  if (now - lastInteractionTime > 100) {
     showPoeticButton = true;
   }
 
-  if (showPoeticMoment && now - poeticMomentStartTime < 30000) {
+  if (showPoeticMoment && now - poeticMomentStartTime < 6000) {
     if (selectedImg && selectedLine) {
+      // Fondo semitransparente para destacar el popup
       push();
-      imageMode(CENTER);
-      tint(255, 220); // más brillante
-      image(selectedImg, width / 2, height / 2, 300, 250);
+      fill(0, 180);
+      noStroke();
+      rect(0, 0, width, height);
       pop();
 
+      // Imagen del popup (1080x720 centrado)
+      push();
+      imageMode(CENTER);
+      tint(255, 220);
+      image(selectedImg, width / 2, height / 2, 1080, 720);
+      pop();
+
+      // Texto sobre el popup
       push();
       fill(255);
-      textSize(26);
-      textAlign(CENTER);
-      text(selectedLine, width / 2, height / 2 + 150);
+      textSize(36);
+      textAlign(CENTER, CENTER);
+      text(selectedLine, width / 2, height / 2 + 320);
       pop();
     }
     return;
-  } else if (showPoeticMoment && now - poeticMomentStartTime >= 30000) {
+  } else if (showPoeticMoment && now - poeticMomentStartTime >= 6000) {
     showPoeticMoment = false;
   }
 
@@ -88,7 +97,7 @@ function draw() {
   rotate(angle);
   scale(zoom);
   imageMode(CENTER);
-  tint(255, 200); // más brillante
+  tint(255, 200);
   image(img, 0, 0, 220, 180);
   pop();
 
