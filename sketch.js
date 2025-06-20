@@ -8,7 +8,6 @@ let showPoeticMoment = false;
 let poeticMomentStartTime = 0;
 let selectedImg = null;
 let selectedLine = "";
-let buttonBottomMargin = 100; // margen desde el borde inferior
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -41,7 +40,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textAlign(CENTER, CENTER);
-  textFont("Courier");
+  textFont("serif");
   frameRate(30);
   fadeAlpha = Array(10).fill(0);
 }
@@ -50,11 +49,11 @@ function draw() {
   background(0, 10);
 
   const now = Date.now();
-  if (now - lastInteractionTime > 0) {
+  if (now - lastInteractionTime > 100) {
     showPoeticButton = true;
   }
 
-  if (showPoeticMoment && now - poeticMomentStartTime < 6000) {
+  if (showPoeticMoment && now - poeticMomentStartTime < 3000) {
     if (selectedImg && selectedLine) {
       // Fondo semitransparente para destacar el popup
       push();
@@ -79,7 +78,7 @@ function draw() {
       pop();
     }
     return;
-  } else if (showPoeticMoment && now - poeticMomentStartTime >= 6000) {
+  } else if (showPoeticMoment && now - poeticMomentStartTime >= 3000) {
     showPoeticMoment = false;
   }
 
@@ -111,7 +110,7 @@ function draw() {
     fill(255, fadeAlpha[i]);
     textSize(size);
     const x = width / 2 + sin(frameCount * motionSpeed * 50 + i) * 200;
-    const y = height / 2 - (lineas.length * 40) / 2 + i * 40;
+    const y = height / 2 + i * 40;
     text(lineas[i], x, y);
     pop();
   }
@@ -119,7 +118,7 @@ function draw() {
   if (showPoeticButton) {
     let blink = frameCount % 60 < 30 ? 255 : 100;
     let buttonX = width / 2 + sin(frameCount * 0.1) * 2;
-    let buttonY = height - buttonBottomMargin + cos(frameCount * 0.1) * 2;
+    let buttonY = height - 60 + cos(frameCount * 0.1) * 2;
     let buttonW = 180;
     let buttonH = 50;
 
@@ -143,7 +142,7 @@ function mousePressed() {
   fadeAlpha = Array(10).fill(0);
 
   if (showPoeticButton) {
-    const d = dist(mouseX, mouseY, width / 2, height - buttonBottomMargin);
+    const d = dist(mouseX, mouseY, width / 2, height - 60);
     if (d < 90) {
       selectedImg = random(imagenes);
       const lineaAleatoria = random(textos);
