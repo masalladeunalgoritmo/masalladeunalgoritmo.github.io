@@ -8,7 +8,7 @@ let showPoeticMoment = false;
 let poeticMomentStartTime = 0;
 let selectedImg = null;
 let selectedLine = "";
-let buttonBottomMargin = 222;
+let buttonBottomMargin = 100; // margen desde el borde inferior
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -26,7 +26,16 @@ function preload() {
     );
   }
 
-  textos = [/* tus textos como ya estaban */];
+  textos = [
+    ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
+    ["soy cuerpo que quema", "lo marchito no es olvido", "el fuego no borra: revela", "una flor que siempre está", "me repito para no extinguirme"],
+    ["te pienso desde la ceniza", "la flor que eligió incendiarse", "el deseo arde cuando se archiva", "me sostengo en el calor del recuerdo", "arder es también un gesto de amor"],
+    ["memoria corrupta, como un sueño", "recuerdos en bucle", "archivo sensible dañado", "mi cuerpo no cabe en tus metadatos", "cada error guarda un nombre"],
+    ["mi voz está comprimida en ruinas", "memoria pixelada de un rostro ausente", "soy el eco de una imagen que nunca muere", "me repito como sistema que falla", "mi archivo carga lento en tu memoria"],
+    ["me arrugo para no desaparecer", "flor quemada es flor aún viva", "soy humo que sabe tu nombre", "me marchito sin rendirme", "lo quemado también recuerda"],
+    ["la pérdida se guarda en capas", "identidad en loop binario", "soy dato que no se deja borrar", "cada pétalo es una versión mía", "arder fue mi forma de quedarme"],
+    ["¿cuando olvidas?", "memoria en delay", "la herida es un archivo abierto", "te guardo como sombra corrupta", "mi cuerpo parpadea en tus errores"]
+  ];
 }
 
 function setup() {
@@ -47,18 +56,21 @@ function draw() {
 
   if (showPoeticMoment && now - poeticMomentStartTime < 6000) {
     if (selectedImg && selectedLine) {
+      // Fondo semitransparente para destacar el popup
       push();
       fill(0, 180);
       noStroke();
       rect(0, 0, width, height);
       pop();
 
+      // Imagen del popup (1080x720 centrado)
       push();
       imageMode(CENTER);
       tint(255, 220);
       image(selectedImg, width / 2, height / 2, 1080, 720);
       pop();
 
+      // Texto sobre el popup
       push();
       fill(255);
       textSize(36);
@@ -130,14 +142,16 @@ function mousePressed() {
   lastInteractionTime = Date.now();
   fadeAlpha = Array(10).fill(0);
 
-  const d = dist(mouseX, mouseY, width / 2, height - buttonBottomMargin);
-  if (showPoeticButton && d < 90) {
-    selectedImg = random(imagenes);
-    const lineaAleatoria = random(textos);
-    selectedLine = random(lineaAleatoria);
-    poeticMomentStartTime = Date.now();
-    showPoeticMoment = true;
-    showPoeticButton = false;
+  if (showPoeticButton) {
+    const d = dist(mouseX, mouseY, width / 2, height - buttonBottomMargin);
+    if (d < 90) {
+      selectedImg = random(imagenes);
+      const lineaAleatoria = random(textos);
+      selectedLine = random(lineaAleatoria);
+      poeticMomentStartTime = Date.now();
+      showPoeticMoment = true;
+      showPoeticButton = false;
+    }
   }
 }
 
