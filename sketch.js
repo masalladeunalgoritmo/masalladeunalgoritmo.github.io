@@ -56,13 +56,13 @@ function draw() {
   // Crossfade de imágenes
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 720, 1080);
+    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
     noTint();
   }
 
   if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 720, 1080);
+    image(imagenActual, width / 2, height / 2, 1080, 1920);
     noTint();
   }
 
