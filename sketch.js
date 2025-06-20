@@ -5,10 +5,12 @@ let imagenActual = null;
 let imagenAnterior = null;
 let textoActual = "";
 let textoAnterior = "";
+let textoVisible = ""; // ← texto parcial para animación
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 3000;
-let duracionFade = 200;
+let intervaloCambio = 30000;
+let duracionFade = 2000;
+let velocidadEscritura = 50; // ms por letra
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -37,8 +39,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
-  textSize(32);
-  textFont("Courier"); // ← Fuente tipo máquina de escribir
+  textSize(28);
+  textFont("Courier");
   fill(255);
   noCursor();
   cambiarContenido(true);
@@ -53,21 +55,26 @@ function draw() {
 
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
+    image(imagenAnterior, width / 2, height / 2, 720, 1080);
     noTint();
   }
 
   if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 1080, 1920);
+    image(imagenActual, width / 2, height / 2, 720, 1080);
     noTint();
   }
 
-  fill(255, 255 * (1 - alpha));
-  text(textoAnterior, width / 2, height / 2 + 600);
+  // Animación de máquina de escribir:
+  let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
+  if (letrasMostrar >= 0) {
+    textoVisible = textoActual.substring(0, letrasMostrar);
+  } else {
+    textoVisible = "";
+  }
 
   fill(255, 255 * alpha);
-  text(textoActual, width / 2, height / 2 + 600);
+  text(textoVisible, width / 2, height / 2 + 600);
 
   if (tiempoTranscurrido > intervaloCambio) {
     cambiarContenido(false);
@@ -85,6 +92,7 @@ function cambiarContenido(primeraVez = false) {
     imagenActual = random(imagenes);
     let grupo = random(textos);
     textoActual = random(grupo);
+    textoVisible = "";
 
     if (primeraVez) {
       imagenAnterior = null;
