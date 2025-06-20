@@ -5,6 +5,7 @@ body {
   overflow: hidden;
   cursor: none;
   font-family: "serif";
+  touch-action: none; /* evita scroll y zoom táctil */
 }
 
 .cursor-poetico {
