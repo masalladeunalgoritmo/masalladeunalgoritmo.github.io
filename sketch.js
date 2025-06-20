@@ -5,12 +5,12 @@ let imagenActual = null;
 let imagenAnterior = null;
 let textoActual = "";
 let textoAnterior = "";
-let textoVisible = ""; // ← texto parcial para animación
+let textoVisible = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 30000;
-let duracionFade = 2000;
-let velocidadEscritura = 50; // ms por letra
+let intervaloCambio = 6000; // ← ahora cambia cada 6 segundos
+let duracionFade = 1000;     // crossfade más rápido (1s)
+let velocidadEscritura = 40; // ms por letra
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -53,6 +53,7 @@ function draw() {
   let tiempoTranscurrido = ahora - tiempoUltimoCambio;
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
 
+  // Crossfade de imágenes
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
     image(imagenAnterior, width / 2, height / 2, 720, 1080);
@@ -65,7 +66,7 @@ function draw() {
     noTint();
   }
 
-  // Animación de máquina de escribir:
+  // Máquina de escribir
   let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
   if (letrasMostrar >= 0) {
     textoVisible = textoActual.substring(0, letrasMostrar);
