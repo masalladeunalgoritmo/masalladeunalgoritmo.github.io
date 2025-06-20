@@ -7,31 +7,19 @@ let textoActual = "";
 let textoAnterior = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 30000;
-let duracionFade = 2000;
-
-let imagenesCargadas = 0;
-let totalImagenes = 40;
-let ready = false;
+let intervaloCambio = 30000; // cada 30 segundos
+let duracionFade = 2000;     // duración del crossfade en ms
 
 function preload() {
-  for (let i = 1; i <= totalImagenes; i++) {
+  for (let i = 1; i <= 40; i++) {
     let pngPath = `assets/${i}.png`;
     let jpgPath = `assets/${i}.jpg`;
 
     loadImage(pngPath,
-      img => {
-        imagenes.push(img);
-        imagenesCargadas++;
-        if (imagenesCargadas === totalImagenes) ready = true;
-      },
+      img => imagenes.push(img),
       () => {
         loadImage(jpgPath,
-          img => {
-            imagenes.push(img);
-            imagenesCargadas++;
-            if (imagenesCargadas === totalImagenes) ready = true;
-          },
+          img => imagenes.push(img),
           () => console.warn(`No se pudo cargar ${pngPath} ni ${jpgPath}`)
         );
       }
@@ -52,40 +40,43 @@ function setup() {
   textSize(28);
   fill(255);
   noCursor();
+  cambiarContenido(true); // primer contenido sin crossfade
+  tiempoUltimoCambio = millis();
 }
 
 function draw() {
   background(0);
-
-  if (!ready) {
-    text("Cargando...", width / 2, height / 2);
-    return;
-  }
-
   let ahora = millis();
   let tiempoTranscurrido = ahora - tiempoUltimoCambio;
+
+  // Calculamos opacidad para el crossfade
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
 
+  // Imagen anterior (desapareciendo)
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
     image(imagenAnterior, width / 2, height / 2, 300, 250);
     noTint();
   }
 
+  // Imagen nueva (apareciendo)
   if (imagenActual) {
     tint(255, 255 * alpha);
     image(imagenActual, width / 2, height / 2, 300, 250);
     noTint();
   }
 
+  // Texto anterior
   fill(255, 255 * (1 - alpha));
   text(textoAnterior, width / 2, height / 2 + 180);
 
+  // Texto nuevo
   fill(255, 255 * alpha);
   text(textoActual, width / 2, height / 2 + 180);
 
-  if (tiempoUltimoCambio === 0 || tiempoTranscurrido > intervaloCambio) {
-    cambiarContenido(tiempoUltimoCambio === 0);
+  // Cambiar contenido si ha pasado el tiempo
+  if (tiempoTranscurrido > intervaloCambio) {
+    cambiarContenido(false);
     tiempoUltimoCambio = ahora;
   }
 }
