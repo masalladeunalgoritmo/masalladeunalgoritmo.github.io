@@ -8,9 +8,9 @@ let textoAnterior = "";
 let textoVisible = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 6000; // ← ahora cambia cada 6 segundos
-let duracionFade = 1000;     // crossfade más rápido (1s)
-let velocidadEscritura = 40; // ms por letra
+let intervaloCambio = 6000;
+let duracionFade = 1000;
+let velocidadEscritura = 40;
 
 function preload() {
   for (let i = 1; i <= 40; i++) {
@@ -53,16 +53,17 @@ function draw() {
   let tiempoTranscurrido = ahora - tiempoUltimoCambio;
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
 
-  // Crossfade de imágenes
+  // Imagen anterior con jitter inverso
   if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
+    glitchEffect(imagenAnterior, 1 - alpha);
     noTint();
   }
 
+  // Imagen actual con jitter progresivo
   if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 1080, 1920);
+    glitchEffect(imagenActual, alpha);
     noTint();
   }
 
@@ -98,6 +99,23 @@ function cambiarContenido(primeraVez = false) {
     if (primeraVez) {
       imagenAnterior = null;
       textoAnterior = "";
+    }
+  }
+}
+
+// Glitch pixel jitter effect
+function glitchEffect(img, strength) {
+  let tiles = 20;
+  let tileW = img.width / tiles;
+  let tileH = img.height / tiles;
+
+  for (let i = 0; i < tiles; i++) {
+    for (let j = 0; j < tiles; j++) {
+      let sx = i * tileW;
+      let sy = j * tileH;
+      let dx = width / 2 - img.width / 2 + sx + random(-5, 5) * (1 - strength);
+      let dy = height / 2 - img.height / 2 + sy + random(-5, 5) * (1 - strength);
+      copy(img, sx, sy, tileW, tileH, dx, dy, tileW, tileH);
     }
   }
 }
