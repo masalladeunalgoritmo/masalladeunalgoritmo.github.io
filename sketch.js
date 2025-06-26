@@ -54,6 +54,11 @@ function draw() {
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
   let glitchActivo = tiempoTranscurrido < 1000;
 
+  // Fondo animado Hydra-style
+  if (glitchActivo) {
+    hydraStyleVisual();
+  }
+
   // Imagen anterior
   if (imagenAnterior && glitchActivo) {
     tint(255, 255 * (1 - alpha));
@@ -76,18 +81,21 @@ function draw() {
     noTint();
   }
 
-  // Máquina de escribir + shake de texto
+  // Máquina de escribir + shake + glow
   let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
-  if (letrasMostrar >= 0) {
-    textoVisible = textoActual.substring(0, letrasMostrar);
-  } else {
-    textoVisible = "";
-  }
+  textoVisible = letrasMostrar >= 0 ? textoActual.substring(0, letrasMostrar) : "";
 
   let shakeX = glitchActivo ? random(-2, 2) : 0;
   let shakeY = glitchActivo ? random(-2, 2) : 0;
+
+  push();
+  if (glitchActivo) {
+    drawingContext.shadowBlur = 20;
+    drawingContext.shadowColor = color(255, 255, 255, 180);
+  }
   fill(255, 255 * alpha);
   text(textoVisible, width / 2 + shakeX, height / 2 + 600 + shakeY);
+  pop();
 
   if (tiempoTranscurrido > intervaloCambio) {
     cambiarContenido(false);
@@ -128,4 +136,46 @@ function ghostTrailDatamosh(img) {
       w, glitchHeight
     );
   }
+}
+
+// Visual animado tipo Hydra
+function hydraStyleVisual() {
+  push();
+  translate(width / 2, height / 2);
+  rotate(frameCount * 0.002);
+
+  for (let i = 0; i < 20; i++) {
+    let offset = i * 20 + frameCount * 0.3;
+    stroke(255 - i * 10, 100, 200, 100);
+    strokeWeight(2);
+    noFill();
+    ellipse(
+      sin(frameCount * 0.01 + i) * 150,
+      cos(frameCount * 0.01 + i) * 150,
+      200 + sin(frameCount * 0.05 + i) * 50
+    );
+  }
+
+  for (let i = 0; i < 6; i++) {
+    push();
+    rotate(TWO_PI * i / 6 + frameCount * 0.005);
+    translate(150, 0);
+    fill(255, 50);
+    stroke(255, 180);
+    polygon(0, 0, 40 + sin(frameCount * 0.1 + i) * 10, 4);
+    pop();
+  }
+
+  pop();
+}
+
+function polygon(x, y, radius, npoints) {
+  let angle = TWO_PI / npoints;
+  beginShape();
+  for (let a = 0; a < TWO_PI; a += angle) {
+    let sx = x + cos(a) * radius;
+    let sy = y + sin(a) * radius;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
 }
