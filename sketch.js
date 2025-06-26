@@ -8,98 +8,96 @@ let textoAnterior = "";
 let textoVisible = "";
 
 let tiempoUltimoCambio = 0;
-let intervaloCambio = 4000; // ← ahora cambia cada 4 segundos
-let duracionFade = 1000;     // crossfade más rápido (1s)
+let intervaloCambio = 6000; // cambia cada 6 segundos
+let duracionFade = 1000;     // crossfade de 1s
 let velocidadEscritura = 40; // ms por letra
 
 function preload() {
-for (let i = 1; i <= 40; i++) {
-let pngPath = assets/${i}.png;
-let jpgPath = assets/${i}.jpg;
+  for (let i = 1; i <= 40; i++) {
+    let pngPath = `assets/${i}.png`;
+    let jpgPath = `assets/${i}.jpg`;
 
-loadImage(pngPath,  
-  img => imagenes.push(img),  
-  () => {  
-    loadImage(jpgPath,  
-      img => imagenes.push(img),  
-      () => console.warn(`No se pudo cargar ${pngPath} ni ${jpgPath}`)  
-    );  
-  }  
-);
+    loadImage(pngPath,
+      img => imagenes.push(img),
+      () => {
+        loadImage(jpgPath,
+          img => imagenes.push(img),
+          () => console.warn(`No se pudo cargar ${pngPath} ni ${jpgPath}`)
+        );
+      }
+    );
+  }
 
-}
-
-textos = [
-["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
-["soy cuerpo que quema", "lo marchito no es olvido", "el fuego no borra lo vivido", "ceniza no es ausencia", "arder es otra forma de florecer"],
-["lo que arde no se olvida", "de los restos brota vida", "en la llama vive el eco", "cuerpo hecho incendio", "la pérdida también enciende"]
-];
+  textos = [
+    ["arder también es persistir", "me quemo para no olvidar(te)", "la flor que prolonga su muerte", "la memoria se incendia suave", "persisto en combustión"],
+    ["soy cuerpo que quema", "lo marchito no es olvido", "el fuego no borra lo vivido", "ceniza no es ausencia", "arder es otra forma de florecer"],
+    ["lo que arde no se olvida", "de los restos brota vida", "en la llama vive el eco", "cuerpo hecho incendio", "la pérdida también enciende"]
+  ];
 }
 
 function setup() {
-createCanvas(windowWidth, windowHeight);
-imageMode(CENTER);
-textAlign(CENTER, CENTER);
-textSize(28);
-textFont("Courier");
-fill(255);
-noCursor();
-cambiarContenido(true);
-tiempoUltimoCambio = millis();
+  createCanvas(windowWidth, windowHeight);
+  imageMode(CENTER);
+  textAlign(CENTER, CENTER);
+  textSize(28);
+  textFont("Courier");
+  fill(255);
+  noCursor();
+  cambiarContenido(true);
+  tiempoUltimoCambio = millis();
 }
 
 function draw() {
-background(0);
-let ahora = millis();
-let tiempoTranscurrido = ahora - tiempoUltimoCambio;
-let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
+  background(0);
+  let ahora = millis();
+  let tiempoTranscurrido = ahora - tiempoUltimoCambio;
+  let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
 
-// Crossfade de imágenes
-if (imagenAnterior) {
-tint(255, 255 * (1 - alpha));
-image(imagenAnterior, width / 2, height / 2, 1080, 1920);
-noTint();
-}
+  // Crossfade de imágenes
+  if (imagenAnterior) {
+    tint(255, 255 * (1 - alpha));
+    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
+    noTint();
+  }
 
-if (imagenActual) {
-tint(255, 255 * alpha);
-image(imagenActual, width / 2, height / 2, 1080, 1920);
-noTint();
-}
+  if (imagenActual) {
+    tint(255, 255 * alpha);
+    image(imagenActual, width / 2, height / 2, 1080, 1920);
+    noTint();
+  }
 
-// Máquina de escribir
-let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
-if (letrasMostrar >= 0) {
-textoVisible = textoActual.substring(0, letrasMostrar);
-} else {
-textoVisible = "";
-}
+  // Máquina de escribir
+  let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
+  if (letrasMostrar >= 0) {
+    textoVisible = textoActual.substring(0, letrasMostrar);
+  } else {
+    textoVisible = "";
+  }
 
-fill(255, 255 * alpha);
-text(textoVisible, width / 2, height / 2 + 600);
+  fill(255, 255 * alpha);
+  text(textoVisible, width / 2, height / 2 + 600);
 
-if (tiempoTranscurrido > intervaloCambio) {
-cambiarContenido(false);
-tiempoUltimoCambio = ahora;
-}
+  if (tiempoTranscurrido > intervaloCambio) {
+    cambiarContenido(false);
+    tiempoUltimoCambio = ahora;
+  }
 }
 
 function cambiarContenido(primeraVez = false) {
-if (imagenes.length > 0) {
-if (!primeraVez) {
-imagenAnterior = imagenActual;
-textoAnterior = textoActual;
-}
+  if (imagenes.length > 0) {
+    if (!primeraVez) {
+      imagenAnterior = imagenActual;
+      textoAnterior = textoActual;
+    }
 
-imagenActual = random(imagenes);  
-let grupo = random(textos);  
-textoActual = random(grupo);  
-textoVisible = "";  
+    imagenActual = random(imagenes);
+    let grupo = random(textos);
+    textoActual = random(grupo);
+    textoVisible = "";
 
-if (primeraVez) {  
-  imagenAnterior = null;  
-  textoAnterior = "";  
-}
-
-}
+    if (primeraVez) {
+      imagenAnterior = null;
+      textoAnterior = "";
+    }
+  }
 }
