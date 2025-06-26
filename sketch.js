@@ -54,7 +54,6 @@ function draw() {
   let alpha = constrain(tiempoTranscurrido / duracionFade, 0, 1);
   let glitchActivo = tiempoTranscurrido < 1000;
 
-  // Fondo animado Hydra-style
   if (glitchActivo) {
     hydraStyleVisual();
   }
@@ -66,7 +65,7 @@ function draw() {
     noTint();
   } else if (imagenAnterior) {
     tint(255, 255 * (1 - alpha));
-    image(imagenAnterior, width / 2, height / 2, 1080, 1920);
+    drawFullImage(imagenAnterior);
     noTint();
   }
 
@@ -77,11 +76,11 @@ function draw() {
     noTint();
   } else if (imagenActual) {
     tint(255, 255 * alpha);
-    image(imagenActual, width / 2, height / 2, 1080, 1920);
+    drawFullImage(imagenActual);
     noTint();
   }
 
-  // Máquina de escribir + shake + glow
+  // Texto con máquina de escribir, shake y glow
   let letrasMostrar = floor((tiempoTranscurrido - duracionFade) / velocidadEscritura);
   textoVisible = letrasMostrar >= 0 ? textoActual.substring(0, letrasMostrar) : "";
 
@@ -122,23 +121,32 @@ function cambiarContenido(primeraVez = false) {
   }
 }
 
-// Glitch horizontal tipo datamosh
+// Escalado proporcional para imagen completa
+function drawFullImage(img) {
+  let scaleFactor = max(width / img.width, height / img.height);
+  let w = img.width * scaleFactor;
+  let h = img.height * scaleFactor;
+  image(img, width / 2, height / 2, w, h);
+}
+
+// Glitch horizontal
 function ghostTrailDatamosh(img) {
-  let h = img.height;
-  let w = img.width;
+  let scaleFactor = max(width / img.width, height / img.height);
+  let w = img.width * scaleFactor;
+  let h = img.height * scaleFactor;
   let glitchHeight = 20;
   for (let y = 0; y < h; y += glitchHeight) {
     let offset = int(random(-30, 30));
     copy(
       img,
-      0, y, w, glitchHeight,
+      0, (y / h) * img.height, img.width, (glitchHeight / h) * img.height,
       width / 2 - w / 2 + offset, height / 2 - h / 2 + y,
       w, glitchHeight
     );
   }
 }
 
-// Visual animado tipo Hydra
+// Visual Hydra-style
 function hydraStyleVisual() {
   push();
   translate(width / 2, height / 2);
@@ -169,6 +177,7 @@ function hydraStyleVisual() {
   pop();
 }
 
+// Polígono tipo shape(n)
 function polygon(x, y, radius, npoints) {
   let angle = TWO_PI / npoints;
   beginShape();
